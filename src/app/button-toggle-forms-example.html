@@ -1,0 +1,190 @@
+<div style="display: flex; flex: 1 100%">
+  <div>
+    <section>
+      <h4>Vehicle/Axle</h4>
+      <mat-button-toggle-group
+        [(ngModel)]="EnterLimitBy"
+        aria-label="Font Style"
+      >
+        <mat-button-toggle value="Vehicle">Vehicle</mat-button-toggle>
+        <mat-button-toggle value="Axle">Axle</mat-button-toggle>
+      </mat-button-toggle-group>
+      <p>Chosen value is {{EnterLimitBy}}</p>
+    </section>
+
+    <section>
+      <h4>Over/Under</h4>
+      <mat-button-toggle-group
+        [(ngModel)]="OverAndUnderLimit"
+        aria-label="Font Style"
+        (change)="changeHeader($event)"
+      >
+        <mat-button-toggle value="Same">Same</mat-button-toggle>
+        <mat-button-toggle value="Different">Different</mat-button-toggle>
+      </mat-button-toggle-group>
+      <p>Chosen value is {{OverAndUnderLimit}}</p>
+    </section>
+  </div>
+  <div style="flex: auto"></div>
+</div>
+
+<section>
+  <table style="width: 100%">
+    <thead>
+      <tr class="top-header">
+        <th colspan="3"></th>
+        <th *ngFor="let header of topHeader" colspan="2">
+          <span *ngIf="header.Icon"
+            ><i [ngClass]="header.Icon" class="header-icon"></i
+          ></span>
+          <span *ngIf="header.display">{{header.Label}}</span>
+        </th>
+      </tr>
+      <tr>
+        <th *ngFor="let header of currentTableHeader">
+          <span *ngIf="header.Icon"
+            ><i [ngClass]="header.Icon" class="header-icon"></i
+          ></span>
+          <span *ngIf="header.display">{{header.Label}}</span>
+        </th>
+      </tr>
+    </thead>
+    <br />
+    <tbody>
+      <tr *ngFor="let axle of VehicleAxles; let i = index">
+        <td>
+          <b>Axle {{axle.Axle}}</b>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input
+              matInput
+              placeholder="Pressure"
+              [(ngModel)]="axle.Pressure"
+            />
+          </mat-form-field>
+        </td>
+        <td [attr.rowspan]="rowspan" *ngIf="renderLimit(i)">
+          <ng-container *ngIf="EnterLimitBy === 'Axle'">
+            <mat-form-field appearance="fill">
+              <input matInput placeholder="Limit" [(ngModel)]="axle.Limit" />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="EnterLimitBy === 'Vehicle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Limit"
+                [(ngModel)]="VehicleAxles[0].Limit"
+                (ngModelChange)="copyLimitToOtherAxle($event)"
+              />
+            </mat-form-field>
+          </ng-container>
+        </td>
+        <td [attr.rowspan]="rowspan" *ngIf="renderLimit(i)">
+          <ng-container *ngIf="EnterLimitBy === 'Axle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Under Warning"
+                [(ngModel)]="axle.UnderWarning"
+              />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="EnterLimitBy === 'Vehicle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Under Warning"
+                [(ngModel)]="VehicleAxles[0].UnderWarning"
+                (ngModelChange)="copyUnderWarningToOtherAxle($event)"
+              />
+            </mat-form-field>
+          </ng-container>
+        </td>
+        <td [attr.rowspan]="rowspan" *ngIf="renderLimit(i)">
+          <ng-container *ngIf="EnterLimitBy === 'Axle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Under Critical"
+                [(ngModel)]="axle.UnderCritical"
+              />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="EnterLimitBy === 'Vehicle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Under Critical"
+                [(ngModel)]="VehicleAxles[0].UnderCritical"
+                (ngModelChange)="copyUnderCriticaltToOtherAxle($event)"
+              />
+            </mat-form-field>
+          </ng-container>
+        </td>
+        <td
+          [attr.rowspan]="rowspan"
+          *ngIf="renderLimit(i) && OverAndUnderLimit =='Different'"
+        >
+          <ng-container *ngIf="EnterLimitBy === 'Axle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Over Warning"
+                [(ngModel)]="axle.OverWarning"
+              />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="EnterLimitBy === 'Vehicle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Over Warning"
+                [(ngModel)]="VehicleAxles[0].OverWarning"
+                (ngModelChange)="copyOverWarningToOtherAxle($event)"
+              />
+            </mat-form-field>
+          </ng-container>
+        </td>
+        <td
+          [attr.rowspan]="rowspan"
+          *ngIf="renderLimit(i) && OverAndUnderLimit =='Different'"
+        >
+          <ng-container *ngIf="EnterLimitBy === 'Axle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Over Critical"
+                [(ngModel)]="axle.OverCritical"
+              />
+            </mat-form-field>
+          </ng-container>
+          <ng-container *ngIf="EnterLimitBy === 'Vehicle'">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="Over Critical"
+                [(ngModel)]="VehicleAxles[0].OverCritical"
+                (ngModelChange)="copyOverCriticalToOtherAxle($event)"
+              />
+            </mat-form-field>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<mat-form-field appearance="fill" style="width: 100%">
+  <textarea
+    matInput
+    value="{{ VehicleAxles|json}}"
+    draggable="false"
+    style="width: 100%; height: 400px"
+  ></textarea>
+</mat-form-field>
+
+<!-- Copyright 2021 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at http://angular.io/license -->
