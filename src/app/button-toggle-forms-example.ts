@@ -11,8 +11,9 @@ import { MatButtonToggleChange } from '@angular/material/button-toggle';
   templateUrl: 'button-toggle-forms-example.html',
 })
 export class ButtonToggleFormsExample {
-  EnterLimitBy: 'Vehicle' | 'Axle' = 'Axle';
-  OverAndUnderLimit: 'Same' | 'Different' = 'Different';
+  EnterLimitBy: 'Vehicle' | 'Axle' = 'Vehicle';
+  OverAndUnderLimit: 'Same' | 'Different' = 'Same';
+  SetLimitUsing: 'Percent' | 'PressureUnit' = 'Percent';
 
   VehicleAxles = [
     {
@@ -65,11 +66,6 @@ export class ButtonToggleFormsExample {
       display: true,
     },
     {
-      Label: 'Limit',
-      Icon: null,
-      display: true,
-    },
-    {
       Label: 'Under Warning',
       Icon: 'fas fa-exclamation-triangle warning',
       display: true,
@@ -99,11 +95,6 @@ export class ButtonToggleFormsExample {
     },
     {
       Label: 'Pressure',
-      Icon: null,
-      display: true,
-    },
-    {
-      Label: 'Limit',
       Icon: null,
       display: true,
     },
@@ -141,10 +132,10 @@ export class ButtonToggleFormsExample {
     }
   ];
 
-  topHeader = this.UnderOverDifferentTopHeader;
+  topHeader = this.UnderOverSameTopHeader;
+  suffix:string = '%'
 
-
-  currentTableHeader = this.OverAndUnderDifferentHeader;
+  currentTableHeader = this.OverAndUnderSameHeader;
   get ObjectKey() {
     return Object.keys(this.VehicleAxles[0]);
   }
@@ -178,6 +169,15 @@ export class ButtonToggleFormsExample {
     if (event.value === 'Different') {
       this.currentTableHeader = this.OverAndUnderDifferentHeader;
       this.topHeader = this.UnderOverDifferentTopHeader;
+    }
+  }
+
+  changeSuffix(event: MatButtonToggleChange) {
+    if (event.value === 'Percent') {
+     this.suffix = '%'
+    }
+    if (event.value === 'PressureUnit') {
+      this.suffix = 'PSI'
     }
   }
 
